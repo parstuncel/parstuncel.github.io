@@ -115,12 +115,6 @@
   .dots { display: flex; gap: 8px; }
   .dot { width: 9px; height: 9px; border-radius: 99px; border: none; background: var(--line); cursor: pointer; transition: width .3s, background .3s; }
   .dot.active { width: 26px; background: var(--highlight); }
-  .ring {
-    width: min(360px, 80vw); aspect-ratio: 1; border-radius: 50%;
-    border: 2px dashed var(--accent); opacity: .35;
-    position: absolute; animation: spin 40s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
   .avatar {
     width: min(290px, 65vw); aspect-ratio: 1;
     border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%;
@@ -271,7 +265,6 @@
     </div>
     <div class="avatar-wrap reveal">
       <div class="avatar-stage">
-        <div class="ring"></div>
         <div class="avatar">
           <img src="avatar.jpg" alt="Cartoon portrait of Pars Tuncel" width="800" height="800">
         </div>
