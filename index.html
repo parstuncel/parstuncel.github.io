@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<script>document.documentElement.classList.add("js");</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pars Tuncel | Senior iOS Engineer</title>
+<meta name="description" content="Pars Tuncel, Senior iOS Engineer in Munich with 8+ years of shipping Swift-first consumer apps. SwiftUI, Swift Concurrency, modular MVVM." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<style>
+  /* ========== Design tokens ========== */
+  :root {
+    --bg: #ffffff;
+    --bg-alt: #f5f7fb;
+    --card: #ffffff;
+    --text: #1c2536;
+    --muted: #6b7486;
+    --line: #e4e8f0;
+    --accent: #0f766e;        /* teal - change to your favourite colour */
+    --accent-soft: #ccfbf1;
+    --highlight: #f59e0b;
+    --avatar-bg: linear-gradient(160deg, #fbf3e6, #f2e1c7);
+    --shadow: 0 10px 30px -12px rgba(15, 30, 60, .18);
+    --radius: 16px;
+  }
+  [data-theme="dark"] {
+    --bg: #0e1420;
+    --bg-alt: #131b2b;
+    --card: #182236;
+    --text: #e8edf6;
+    --muted: #94a0b6;
+    --line: #26324a;
+    --accent: #2dd4bf;
+    --accent-soft: #134e4a;
+    --avatar-bg: linear-gradient(160deg, #f6ecdc, #e9d6b9);
+    --shadow: 0 10px 30px -12px rgba(0, 0, 0, .6);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    transition: background .3s, color .3s;
+  }
+  h1, h2, h3 { font-family: "Space Grotesk", sans-serif; line-height: 1.1; }
+  a { color: inherit; text-decoration: none; }
+  .container { width: min(1120px, 90%); margin: 0 auto; }
+
+  /* ========== Header ========== */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s;
+  }
+  header.scrolled { border-color: var(--line); }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .logo {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: var(--accent); color: #fff;
+    display: grid; place-items: center;
+    font-family: "Space Grotesk"; font-weight: 700; font-size: 15px;
+  }
+  .nav-links { display: flex; gap: 28px; font-size: 15px; color: var(--muted); }
+  .nav-links a:hover { color: var(--accent); }
+  .icon-btn {
+    width: 42px; height: 42px; border-radius: 50%;
+    border: none; background: var(--bg-alt); color: var(--text);
+    cursor: pointer; display: grid; place-items: center;
+  }
+  .icon-btn svg { width: 20px; height: 20px; }
+
+  /* ========== Hero ========== */
+  .hero { min-height: calc(100vh - 72px); display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 40px; padding: 40px 0; }
+  .hero .hello { color: var(--muted); font-size: 20px; }
+  .hero h1 { font-size: clamp(48px, 7vw, 84px); margin: 6px 0 14px; }
+  .hero h1 span { color: var(--accent); }
+  .tagline { font-family: "Space Grotesk"; font-size: clamp(24px, 3vw, 34px); font-weight: 700; color: var(--muted); }
+  .tagline .word { color: var(--text); transition: color .3s; position: relative; }
+  .tagline .word.active { color: var(--text); }
+  .tagline .word.active::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 4px;
+    background: var(--highlight); border-radius: 4px; animation: grow .5s ease;
+  }
+  .tagline .word:not(.active) { opacity: .45; }
+  @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .hero p.lead { margin: 22px 0 32px; color: var(--muted); max-width: 440px; }
+  .buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 24px; border-radius: 12px; font-weight: 500;
+    border: 1px solid var(--line); transition: transform .2s, box-shadow .2s;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  [data-theme="dark"] .btn.primary { color: #0e1420; }
+
+  .avatar-wrap { position: relative; display: flex; flex-direction: column; align-items: center; gap: 28px; }
+  .avatar-stage { position: relative; display: grid; place-items: center; }
+  .avatar { position: relative; }
+  .badge { position: absolute; right: 4%; top: 8%; width: 60px; height: 60px; border-radius: 50%; background: var(--card); box-shadow: var(--shadow); display: grid; place-items: center; font-size: 28px; opacity: 0; transform: scale(.6) rotate(-20deg); transition: opacity .5s ease, transform .5s cubic-bezier(.3,1.6,.5,1); }
+  .badge.active { opacity: 1; transform: none; animation: bob 3s ease-in-out infinite; }
+  .scene { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transform: scale(.94); transition: opacity .6s ease, transform .6s ease; }
+  .scene.active { opacity: 1; transform: none; }
+  .float { animation: bob 3s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(-6px); } }
+  .dots { display: flex; gap: 8px; }
+  .dot { width: 9px; height: 9px; border-radius: 99px; border: none; background: var(--line); cursor: pointer; transition: width .3s, background .3s; }
+  .dot.active { width: 26px; background: var(--highlight); }
+  .ring {
+    width: min(360px, 80vw); aspect-ratio: 1; border-radius: 50%;
+    border: 2px dashed var(--accent); opacity: .35;
+    position: absolute; animation: spin 40s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .avatar {
+    width: min(290px, 65vw); aspect-ratio: 1;
+    border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%;
+    background: var(--avatar-bg);
+    box-shadow: var(--shadow);
+    display: grid; place-items: center; overflow: hidden;
+    animation: blob 10s ease-in-out infinite;
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar .initials { font-family: "Space Grotesk"; font-size: 96px; font-weight: 700; color: var(--accent); }
+  @keyframes blob {
+    50% { border-radius: 55% 45% 40% 60% / 55% 60% 40% 45%; }
+  }
+
+  /* ========== Sections ========== */
+  section { padding: 110px 0; }
+  section.alt { background: var(--bg-alt); }
+  .num { color: var(--accent); font-family: "Space Grotesk"; font-weight: 700; letter-spacing: 2px; font-size: 14px; }
+  .section-title { font-size: clamp(36px, 5vw, 56px); margin: 8px 0 16px; }
+  .section-intro { color: var(--muted); max-width: 640px; font-size: 18px; margin-bottom: 56px; }
+
+  /* About + timeline */
+  .about-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 64px; }
+  .about-text p { margin-bottom: 18px; font-size: 17px; }
+  .hobbies h3 { font-size: 18px; margin: 32px 0 14px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { padding: 7px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 14px; font-weight: 500; }
+  .timeline { border-left: 2px solid var(--line); padding-left: 28px; }
+  .tl-item { position: relative; margin-bottom: 36px; }
+  .tl-item::before {
+    content: ""; position: absolute; left: -36px; top: 6px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--bg); border: 3px solid var(--accent);
+  }
+  .tl-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .tl-head h3 { font-size: 20px; }
+  .tl-date { color: var(--muted); font-size: 14px; }
+  .tl-org { color: var(--accent); font-weight: 600; font-size: 15px; margin: 2px 0 6px; }
+  .tl-item p { color: var(--muted); font-size: 15px; }
+  .quote { margin: 0 0 36px; padding: 20px 24px; border-left: 4px solid var(--accent); background: var(--bg-alt); border-radius: 0 var(--radius) var(--radius) 0; }
+  .quote p { font-family: "Space Grotesk", sans-serif; font-size: 17px; line-height: 1.5; }
+  .quote p + p { margin-top: 12px; }
+  .quote footer { margin-top: 8px; padding: 0; border: none; text-align: left; color: var(--muted); font-size: 13px; }
+  .tl-item p + p { margin-top: 8px; }
+  .tl-label { font-size: 13px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin: 8px 0 20px; }
+
+  /* Toolbox */
+  .group-label { font-size: 13px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin: 40px 0 18px; }
+  .tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 16px; }
+  .tool {
+    background: var(--card); border-radius: 14px; padding: 18px 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    font-size: 13px; font-weight: 500;
+    border: 1px solid var(--line);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .tool:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .tool i { font-size: 38px; }
+  .tool-txt { font-size: 30px; line-height: 38px; height: 38px; font-weight: 700; color: var(--accent); font-family: "Space Grotesk"; }
+  .tool { text-align: center; }
+
+  /* Projects */
+  .projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 28px; }
+  .project {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .project:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+  .project .thumb { height: 170px; display: grid; place-items: center; font-size: 54px; }
+  .project .body { padding: 24px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .project h3 { font-size: 22px; }
+  .project p { color: var(--muted); font-size: 15px; flex: 1; }
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag { font-size: 12px; padding: 4px 10px; border-radius: 6px; background: var(--bg-alt); color: var(--muted); font-weight: 500; }
+  .project .link { color: var(--accent); font-weight: 600; font-size: 14px; }
+
+  /* Contact */
+  .contact { text-align: center; }
+  .contact .section-intro { margin-left: auto; margin-right: auto; }
+  .socials { display: flex; justify-content: center; gap: 14px; margin-top: 28px; }
+  .socials a { width: 48px; height: 48px; border-radius: 50%; background: var(--card); border: 1px solid var(--line); display: grid; place-items: center; font-size: 22px; transition: transform .2s; }
+  .socials a:hover { transform: translateY(-3px); color: var(--accent); }
+  footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+
+  /* Back to top */
+  .to-top {
+    position: fixed; right: 24px; bottom: 24px; width: 48px; height: 48px;
+    border-radius: 50%; background: var(--accent); color: #fff; border: none;
+    cursor: pointer; display: grid; place-items: center; box-shadow: var(--shadow);
+    opacity: 0; pointer-events: none; transition: opacity .3s;
+  }
+  .to-top.show { opacity: 1; pointer-events: auto; }
+
+  /* Scroll reveal */
+  .js .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+  .js .reveal.visible { opacity: 1; transform: none; }
+
+  /* Responsive */
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; text-align: left; padding-top: 30px; }
+    .avatar-wrap { order: -1; margin: 20px 0; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .nav-links { display: none; }
+    section { padding: 80px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="container nav">
+    <a href="#top" class="brand"><span class="logo">PT</span> Pars Tuncel</a>
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#toolbox">Toolbox</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ===== HERO ===== -->
+  <div class="container hero">
+    <div class="reveal">
+      <div class="hello">Hey there, I am</div>
+      <h1>Pars Tuncel<span>.</span></h1>
+      <div class="tagline">I <span class="word active">build</span>, <span class="word">ship</span>, and <span class="word">play</span>!</div>
+      <p class="lead">Senior iOS Engineer in Munich with 8+ years of shipping Swift-first consumer apps to the App Store.</p>
+      <div class="buttons">
+        <a href="resume.pdf" class="btn primary" download>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Resume
+        </a>
+        <a href="#projects" class="btn">
+          What I've built
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="avatar-wrap reveal">
+      <div class="avatar-stage">
+        <div class="ring"></div>
+        <div class="avatar">
+          <img src="avatar.jpg" alt="Cartoon portrait of Pars Tuncel" width="800" height="800">
+        </div>
+        <span class="badge active" aria-hidden="true">💻</span>
+        <span class="badge" aria-hidden="true">🚀</span>
+        <span class="badge" aria-hidden="true">⚽</span>
+      </div>
+      <div class="dots" role="tablist" aria-label="Illustrations">
+        <button class="dot active" aria-label="Build"></button>
+        <button class="dot" aria-label="Ship"></button>
+        <button class="dot" aria-label="Play"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
+    <div class="container">
+      <div class="reveal">
+        <div class="num">01</div>
+        <h2 class="section-title">A bit about me</h2>
+        <p class="section-intro">I'm an iOS engineer with 8+ years of experience building consumer apps people use every day, most recently at CHECK24, Germany's largest comparison portal, where I was promoted to Senior within 15 months.</p>
+      </div>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>I work with SwiftUI and UIKit, async/await and Swift Concurrency, Combine, and a modular MVVM architecture. I like modernizing codebases, making builds and releases faster, and improving live flows with feature flags and A/B tests.</p>
+          <p>Since early 2026 I've also taken full-stack tickets on CHECK24's mortgage apps with Java, Spring, Vue.js and Oracle. I use Claude Code and Cursor every day to move faster while keeping code well tested.</p>
+          <p>Away from the keyboard, I've spent more than ten years in elite sports leagues played professional korfball, was team captain for three years, and was selected for the Turkish national team's candidate squad.</p>
+          <div class="hobbies">
+            <h3>What my team values</h3>
+            <div class="chips">
+              <span class="chip">Sharp analysis</span>
+              <span class="chip">Quick to grasp new problems</span>
+              <span class="chip">Calm under pressure</span>
+              <span class="chip">Careful, precise work</span>
+              <span class="chip">Takes initiative</span>
+              <span class="chip">Team player</span>
+            </div>
+          </div>
+          <div class="hobbies">
+            <h3>Languages I speak</h3>
+            <div class="chips">
+              <span class="chip">Turkish · Native</span>
+              <span class="chip">English · Fluent (Cambridge FCE)</span>
+              <span class="chip">German · A2</span>
+            </div>
+          </div>
+          <div class="hobbies">
+            <h3>…when I unplug</h3>
+            <div class="chips">
+              <span class="chip">⚽ Football</span>
+              <span class="chip">🏐 Korfball</span>
+              <span class="chip">🏋️ Fitness</span>
+              <span class="chip">🚗 Road trips</span>
+              <span class="chip">🗣️ Languages</span>
+              <span class="chip">💡 New tech</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="tl-label">Experience</div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-head"><h3>Senior Software Developer (iOS &amp; Full Stack)</h3><span class="tl-date">Apr 2023 – Present</span></div>
+              <div class="tl-org">CHECK24 · Munich</div>
+              <p>Joined as Software Developer (iOS) and was promoted to Senior in July 2024 for consistently very good performance. Rebuilt core shopping journeys in SwiftUI and MVVM, moved local modules to Swift Package Manager for faster builds, ran A/B tests on live flows with feature flags, and replaced legacy callback code with async/await.</p>
+              <p>I define requirements with Product Management and do code reviews. Since early 2026, after the team moved to a full-stack model, I also handle iOS, frontend and backend tickets on mortgage apps (Java, Spring, Vue.js, Oracle), including production monitoring and fast incident fixes.</p>
+            </div>
+            <div class="tl-item">
+              <div class="tl-head"><h3>Senior iOS Developer</h3><span class="tl-date">Jan 2022 – Apr 2023</span></div>
+              <div class="tl-org">Vodafone · Turkey</div>
+              <p>Improved and maintained the Vodafone My Care app for the Turkish and global markets. Designed reusable UI components, refactored legacy Objective-C into modern Swift, raised unit test coverage and fixed performance bottlenecks.</p>
+            </div>
+            <div class="tl-item">
+              <div class="tl-head"><h3>iOS Developer</h3><span class="tl-date">Jul 2018 – Jan 2022</span></div>
+              <div class="tl-org">Doğuş Teknoloji · Turkey</div>
+              <p>Built and maintained several iOS apps for Doğuş Group companies with UIKit, automated CI/CD pipelines for faster App Store releases, and worked with product teams to debug crash reports.</p>
+            </div>
+          </div>
+          <blockquote class="quote">
+            <p>“Thanks to his precise analytical skills and quick grasp, he is able at all times to assess even difficult situations immediately and accurately and to find good solutions quickly.”</p>
+            <p>“Mr Tuncel’s performance receives our fullest recognition at all times and in every respect.”</p>
+            <footer>From my CHECK24 reference letter, August 2026 (translated from German)</footer>
+          </blockquote>
+          <div class="tl-label">Education</div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-head"><h3>Bachelor's in Computer Engineering</h3><span class="tl-date">2015 – 2019</span></div>
+              <div class="tl-org">Yeditepe University · Istanbul</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TOOLBOX ===== -->
+  <section id="toolbox" class="alt">
+    <div class="container">
+      <div class="reveal">
+        <div class="num">02</div>
+        <h2 class="section-title">My toolbox</h2>
+        <p class="section-intro">Native iOS is my home. Since 2026 I also work on the backend and web side.</p>
+      </div>
+      <!-- Tool grids are generated from the lists in the script at the bottom — edit them there -->
+      <div id="toolGroups"></div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section id="projects">
+    <div class="container">
+      <div class="reveal">
+        <div class="num">03</div>
+        <h2 class="section-title">What I've built</h2>
+        <p class="section-intro">Highlights from shipping iOS apps at CHECK24, Vodafone and Doğuş.</p>
+      </div>
+      <div class="projects">
+        <article class="project reveal">
+          <div class="thumb" style="background:linear-gradient(135deg,#ccfbf1,#e0e7ff)">🛒</div>
+          <div class="body">
+            <h3>Shopping journeys in SwiftUI</h3>
+            <p>Rebuilt CHECK24’s core shopping journeys in SwiftUI with an MVVM architecture.</p>
+            <div class="tags"><span class="tag">SwiftUI</span><span class="tag">MVVM</span><span class="tag">Swift</span></div>
+          </div>
+        </article>
+        <article class="project reveal">
+          <div class="thumb" style="background:linear-gradient(135deg,#fef3c7,#fce7f3)">📦</div>
+          <div class="body">
+            <h3>Faster builds with SPM</h3>
+            <p>Moved local modules to Swift Package Manager to cut overall build times for the team.</p>
+            <div class="tags"><span class="tag">Swift Package Manager</span><span class="tag">Xcode</span></div>
+          </div>
+        </article>
+        <article class="project reveal">
+          <div class="thumb" style="background:linear-gradient(135deg,#e0e7ff,#fef3c7)">🧪</div>
+          <div class="body">
+            <h3>A/B tests on live flows</h3>
+            <p>Used feature flags to run and analyze A/B tests on live flows, and replaced legacy callback code with async/await.</p>
+            <div class="tags"><span class="tag">Feature flags</span><span class="tag">async/await</span></div>
+          </div>
+        </article>
+        <article class="project reveal">
+          <div class="thumb" style="background:linear-gradient(135deg,#fee2e2,#fef3c7)">📱</div>
+          <div class="body">
+            <h3>Vodafone My Care</h3>
+            <p>Improved the self-care app for the Turkish and global markets: reusable UI components, Objective-C to Swift, more tests and better performance.</p>
+            <div class="tags"><span class="tag">Swift</span><span class="tag">Objective-C</span><span class="tag">UIKit</span></div>
+          </div>
+        </article>
+        <article class="project reveal">
+          <div class="thumb" style="background:linear-gradient(135deg,#dbeafe,#ccfbf1)">🏡</div>
+          <div class="body">
+            <h3>Mortgage apps (full stack)</h3>
+            <p>Since 2026: iOS, frontend and backend tickets on CHECK24’s mortgage apps, plus production monitoring and incident fixes.</p>
+            <div class="tags"><span class="tag">Java</span><span class="tag">Spring</span><span class="tag">Vue.js</span><span class="tag">Oracle</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="alt contact">
+    <div class="container reveal">
+      <div class="num">04</div>
+      <h2 class="section-title">Let's talk</h2>
+      <p class="section-intro">Based in Munich. Have a role, a project or a question? Send me a message.</p>
+      <a href="mailto:pars.tuncel@gmail.com" class="btn primary">Say hello</a>
+      <div class="socials">
+        <a href="https://www.linkedin.com/in/pars-tuncel/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><i class="devicon-linkedin-plain"></i></a>
+        <a href="https://github.com/parstuncel" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><i class="devicon-github-original"></i></a>
+        <a href="https://medium.com/@pars-tuncel" target="_blank" rel="noopener" aria-label="Medium" title="Medium">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><ellipse cx="6.8" cy="12" rx="6.8" ry="6.9"/><ellipse cx="17.6" cy="12" rx="3.4" ry="6.5"/><ellipse cx="22.6" cy="12" rx="1.3" ry="5.8"/></svg>
+        </a>
+        <a href="https://www.instagram.com/parstuncel" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> Pars Tuncel · Built with care</footer>
+
+<button class="to-top" id="toTop" aria-label="Back to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+  // ---------- EDIT YOUR TOOLBOX HERE ----------
+  // icon = a devicon class name (search names at https://devicon.dev)
+  const toolGroups = {
+    "iOS": [
+      ["Swift", "devicon-swift-plain colored"],
+      ["SwiftUI", "devicon-swift-plain colored"],
+      ["UIKit", "devicon-apple-original"],
+      ["Objective-C", "devicon-objectivec-plain colored"],
+      ["Combine", "txt:⇢"],
+      ["async/await", "txt:⏱"],
+      ["MVVM", "txt:▦"],
+      ["Swift Package Manager", "devicon-swift-plain colored"],
+      ["Xcode", "devicon-xcode-plain colored"],
+    ],
+    "Platform & Quality": [
+      ["REST APIs", "txt:{ }"],
+      ["GraphQL", "devicon-graphql-plain colored"],
+      ["Push (APNs)", "txt:🔔"],
+      ["Keychain & Face ID", "txt:🔐"],
+      ["Unit testing", "txt:✓"],
+      ["Feature flags & A/B tests", "txt:A|B"],
+    ],
+    "Backend & Web (since 2026)": [
+      ["Java", "devicon-java-plain colored"],
+      ["Spring", "devicon-spring-original colored"],
+      ["Vue.js", "devicon-vuejs-plain colored"],
+      ["Oracle", "devicon-oracle-original colored"],
+    ],
+    "Tools": [
+      ["Git", "devicon-git-plain colored"],
+      ["Jira", "devicon-jira-plain colored"],
+      ["CI/CD", "txt:⚙︎"],
+      ["Claude Code", "txt:✳"],
+      ["Cursor", "txt:▲"],
+    ],
+  };
+
+  const groupsEl = document.getElementById("toolGroups");
+  for (const [label, tools] of Object.entries(toolGroups)) {
+    const wrap = document.createElement("div");
+    wrap.className = "reveal";
+    wrap.innerHTML = `<div class="group-label">${label}</div><div class="tools">` +
+      tools.map(([name, icon]) => `<div class="tool">${icon.startsWith("txt:")
+        ? `<span class="tool-txt">${icon.slice(4)}</span>` : `<i class="${icon}"></i>`}${name}</div>`).join("") +
+      `</div>`;
+    groupsEl.appendChild(wrap);
+  }
+
+  // ---------- Rotating tagline ----------
+  const words = document.querySelectorAll(".tagline .word");
+  const scenes = document.querySelectorAll(".badge");
+  const dots = document.querySelectorAll(".dot");
+  let i = 0, timer;
+  function show(n) {
+    if (n === i) return;
+    [words, scenes, dots].forEach(list => list[i].classList.remove("active"));
+    i = n;
+    [words, scenes, dots].forEach(list => list[i].classList.add("active"));
+  }
+  function start() { clearInterval(timer); timer = setInterval(() => show((i + 1) % words.length), 3000); }
+  dots.forEach((d, n) => d.onclick = () => { show(n); start(); });
+  start();
+
+  // ---------- Dark mode ----------
+  const root = document.documentElement;
+  const icon = document.getElementById("themeIcon");
+  const moon = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  const sun = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  function setTheme(t) {
+    root.dataset.theme = t;
+    icon.innerHTML = t === "dark" ? sun : moon;
+    localStorage.setItem("theme", t);
+  }
+  setTheme(localStorage.getItem("theme") ||
+    (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+  document.getElementById("themeToggle").onclick = () =>
+    setTheme(root.dataset.theme === "dark" ? "light" : "dark");
+
+  // ---------- Header border, back-to-top ----------
+  const header = document.getElementById("header");
+  const toTop = document.getElementById("toTop");
+  addEventListener("scroll", () => {
+    header.classList.toggle("scrolled", scrollY > 10);
+    toTop.classList.toggle("show", scrollY > 500);
+  });
+  toTop.onclick = () => scrollTo({ top: 0, behavior: "smooth" });
+
+  // ---------- Scroll reveal ----------
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
